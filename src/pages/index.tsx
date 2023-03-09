@@ -1,5 +1,6 @@
 import Head from 'next/head'
 import { TodoType } from '@/types/types'
+import Todo from '../components/Todo'
 
  
 export default function Home({ todos }: { todos: TodoType[] }) {
@@ -7,7 +8,7 @@ export default function Home({ todos }: { todos: TodoType[] }) {
     <>
       <header className='flex items-center justify-between bg-red-500 py-4 px-64 text-3xl font-bold drop-shadow-md text-white '>
         <h1 className="">
-          Todos
+          To Dos
         </h1>
         <button className='hover:cursor-pointer'>
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={4} stroke="currentColor" className="w-6 h-6">
@@ -16,13 +17,9 @@ export default function Home({ todos }: { todos: TodoType[] }) {
         </button>
       </header>
       
-      <div className='flex h-screen'>
-        <div className="mx-auto my-20">
-          {todos.map((todo) => 
-            <div key={todo.id}>{todo.title}</div>
-          )}
-        </div>
-      </div>
+      {todos.map((todo) => 
+          <Todo todo={todo}/>
+      )}
     </>
   )
 }
@@ -31,8 +28,6 @@ export default function Home({ todos }: { todos: TodoType[] }) {
 export async function getServerSideProps() {
   const res = await fetch('http://localhost:8080/todos/')
   const todos = await res.json()
-
-  console.log(todos)
 
   return {
     props: {
