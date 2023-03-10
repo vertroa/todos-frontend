@@ -25,6 +25,18 @@ export default function Home({ todos }: { todos: TodoType[] }) {
     ])
   }
 
+  async function handleDeleteButton(e: React.MouseEvent<SVGSVGElement>, id: number) {
+    const requestOptions = {
+      method: 'DELETE',
+      headers: { 'Content-Type': 'application/json' },
+    };
+    
+    const res = await fetch(`http://localhost:8080/todos/${id}`, requestOptions)
+    const data: TodoType = await res.json()
+
+    setTodoState(todoListState.filter((todo) => todo.id !== id))
+  }
+
   return (
     <>
       <header className='flex items-center justify-between bg-red-500 py-4 px-64 text-3xl font-bold drop-shadow-md text-white '>
@@ -39,7 +51,7 @@ export default function Home({ todos }: { todos: TodoType[] }) {
       </header>
 
       {todoListState.map((todo) => 
-          <Todo key={todo.id} todo={todo}/>
+          <Todo key={todo.id} handelDel={handleDeleteButton} todo={todo}/>
       )}
     </>
   )
