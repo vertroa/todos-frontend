@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react'
 
  
 export default function Home({ todos }: { todos: TodoType[] }) {
-  const [todoListState, setTodoState] = useState<TodoType[]>(todos)
+  const [todoListState, setTodoListState] = useState<TodoType[]>(todos)
 
   async function handleAddButton(e: React.MouseEvent<HTMLButtonElement>) {
     e.preventDefault()
@@ -19,7 +19,7 @@ export default function Home({ todos }: { todos: TodoType[] }) {
     const res = await fetch('http://localhost:8080/todos', requestOptions)
     const data: TodoType = await res.json()
 
-    setTodoState([
+    setTodoListState([
       ...todoListState, 
       data
     ])
@@ -34,26 +34,27 @@ export default function Home({ todos }: { todos: TodoType[] }) {
     const res = await fetch(`http://localhost:8080/todos/${id}`, requestOptions)
     const data: TodoType = await res.json()
 
-    setTodoState(todoListState.filter((todo) => todo.id !== id))
+    setTodoListState(todoListState.filter((todo) => todo.id !== id))
   }
 
   return (
-    <>
-      <header className='flex items-center justify-between bg-red-500 py-4 px-64 text-3xl font-bold drop-shadow-md text-white '>
-        <h1 className="">
-          To Dos
-        </h1>
-        <button onClick={handleAddButton} className='hover:cursor-pointer'>
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-8 h-8 hover:hover:fill-emerald-500">
-            <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
-          </svg>
-        </button>
-      </header>
+  <>
+    <header className='flex items-center justify-between bg-red-500 py-4 px-64 text-3xl font-bold drop-shadow-md text-white '>
+      <h1 className="">
+        To Dos
+      </h1>
+      <button onClick={handleAddButton} className='hover:cursor-pointer'>
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-8 h-8 hover:hover:fill-emerald-500">
+          <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+      </button>
+    </header>
 
-      {todoListState.map((todo) => 
-          <Todo key={todo.id} handelDel={handleDeleteButton} todo={todo}/>
-      )}
-    </>
+    {/* {console.log(todoListState)} */}
+    {todoListState.map((todo) => 
+        <Todo key={todo.id} handelDel={handleDeleteButton} todo={todo}/>
+    )}
+  </>
   )
 }
 
