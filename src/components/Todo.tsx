@@ -4,6 +4,8 @@ import { useState } from 'react'
 
 export default function Todo(props: any) {
   const [todoState, setTodoState] = useState<TodoType>(props.todo)
+  const [isEditing, setIsEditing] = useState<boolean>(false)
+  const [titleInput, setTitleInput] = useState<string>(todoState.title)
 
   async function handleEdit(e: React.MouseEvent<SVGSVGElement>, id: number) {
 
@@ -26,14 +28,37 @@ export default function Todo(props: any) {
     })
   }
 
+  function handleTitleEdit(e: React.ChangeEvent<HTMLInputElement>) {
+    setTitleInput(e.target.value)
+  }
+
+  async function saveTodo(e: React.FocusEvent<HTMLHeadingElement>) {
+    e.preventDefault()
+  
+    const requestOptions = {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ title: titleInput, description: 'Edited Todo Description', completed: false })
+    };
+
+    await fetch(`http://localhost:8080/todos/${todoState.id}`, requestOptions)
+
+    setIsEditing(false)
+  }
+
   return (
     <>
-      <div className='grid grid-cols-2 grid-rows-2 bg-slate-100 mx-64 px-5 py-5 rounded-lg my-4 drop-shadow-md'>
-          <div>
-            <h3 className='text-lg font-bold'>{todoState.title}</h3>
+      <div className='grid grid-cols-3 grid-rows-2 mx-64 px-3 py-3  bg-slate-100 rounded-lg my-4 drop-shadow-md'>
+          <div className='col-span-2 text-lg font-bold pb-2'>
+            {isEditing ?
+              <input type="text" className='outline-none px-2 bg-slate-100 focus:outline-slate-300 focus:rounded-lg focus:outline' value={titleInput} onChange={handleTitleEdit} onBlur={saveTodo} />
+            :
+            <h3 onClick={e => setIsEditing(prev => (!prev))} className='px-2'>{titleInput}</h3>
+          }
           </div>
 
-          <div className='flex justify-end space-x-2'>
+
+          <div className='flex row-span-2 items-center justify-end space-x-2'>
             <svg xmlns="http://www.w3.org/2000/svg" onClick={event => handleEdit(event, todoState.id)}fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6 hover:cursor-pointer hover:fill-teal-400">
               <path strokeLinecap="round" strokeLinejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10" />
             </svg>
@@ -44,7 +69,7 @@ export default function Todo(props: any) {
           </div>
 
           <div className='mt-1 col-span-2'>
-            <p className='text-sm'>{todoState.description}</p>
+            <p className='text-sm px-2'>{todoState.description}</p>
           </div>
       </div>
     </>
