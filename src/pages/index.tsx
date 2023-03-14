@@ -43,8 +43,8 @@ export default function Home({ todos }: { todos: TodoType[] }) {
   return (
   <>
     <header className='grid grid-cols-12 bg-red-500 py-4 text-3xl font-bold drop-shadow-md text-white '>
-      <div className='col-span-3'></div>
-      <div className='col-span-6 flex items-center justify-between'>
+      <div className='col-span-1 md:col-span-3 xl:col-span-4'></div>
+      <div className='col-span-10 md:col-span-6 xl:col-span-4 flex items-center justify-between'>
         <h1 className="">
           To Dos
         </h1>
