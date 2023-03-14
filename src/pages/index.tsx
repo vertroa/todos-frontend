@@ -16,7 +16,6 @@ export default function Home({ todos }: { todos: TodoType[] }) {
     };
 
     const addURL = `${process.env.NEXT_PUBLIC_API}/todos`
-    console.log(addURL)
     const res = await fetch(addURL, requestOptions)
     const data: TodoType = await res.json()
 
@@ -34,7 +33,6 @@ export default function Home({ todos }: { todos: TodoType[] }) {
     };
     
     const deleteURL = `${process.env.NEXT_PUBLIC_API}/todos/${id}`
-    console.log(deleteURL)
     const res = await fetch(deleteURL, requestOptions)
 
     setTodoListState(todoListState.filter((todo) => todo.id !== id))
