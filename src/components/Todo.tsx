@@ -28,7 +28,7 @@ export default function Todo(props: any) {
     }))
   }
 
-  // Updates the title or description of the todo when the user clicks out of the input field
+  // Saves the todo to the backend API when the user clicks out of the input field
   function updateTodoField(e: React.FocusEvent<HTMLHeadingElement>) {
     e.preventDefault()
 
@@ -44,7 +44,7 @@ export default function Todo(props: any) {
   }
 
   // Toggles the todo's completed status
-  async function changeTodoStatus(e: React.MouseEvent<HTMLButtonElement>) {
+  function changeTodoStatus(e: React.MouseEvent<HTMLButtonElement>) {
     setTodo(prev => ({
       ...prev,
       completed: !prev.completed
@@ -52,16 +52,16 @@ export default function Todo(props: any) {
 
     // Create updated version of the todo to avoid state not updating in time
     const updatedTodo = {...todo, completed: !todo.completed}
-    await saveTodo(updatedTodo)
+    saveTodo(updatedTodo)
   }
 
   return (
     <>
-    <div className='grid grid-cols-12 justify-center'>
+    <div className='grid justify-center grid-cols-12'>
       <div className='col-span-1 md:col-span-3 xl:col-span-4'></div>
-      <div className='col-span-10 md:col-span-6 xl:col-span-4 grid grid-cols-5 grid-rows-2 px-3 py-3 bg-slate-100 rounded-lg my-4 drop-shadow-md'>
+      <div className='grid grid-cols-5 col-span-10 grid-rows-2 px-3 py-3 my-4 rounded-lg md:col-span-6 xl:col-span-4 bg-slate-100 drop-shadow-md'>
         <div 
-        className='flex row-span-2 my-auto justify-center'>
+        className='flex justify-center row-span-2 my-auto'>
         <button 
           className={todo.completed ? 
             'border-2 w-7 h-7 rounded-full bg-red-500'
@@ -81,7 +81,7 @@ export default function Todo(props: any) {
               value={todo.title} 
               onChange={handleEdit} 
               onBlur={updateTodoField} 
-              className='outline-none  bg-slate-100 focus:outline-slate-300 focus:rounded-lg focus:outline' 
+              className='outline-none bg-slate-100 focus:outline-slate-300 focus:rounded-lg focus:outline' 
             />
           :
           <h3 
@@ -93,7 +93,7 @@ export default function Todo(props: any) {
         }
         </div>
 
-        <div className='flex row-span-1 items-center justify-end space-x-2'>
+        <div className='flex items-center justify-end row-span-1 space-x-2'>
           <svg 
             xmlns="http://www.w3.org/2000/svg" 
             onClick={event => props.handelDel(event, todo.id)} 
@@ -106,7 +106,7 @@ export default function Todo(props: any) {
           </svg>
         </div>
 
-        <div className='mt-1 col-span-4'>
+        <div className='col-span-4 mt-1'>
           {isEditing ?
             <input
               type="text"
@@ -114,7 +114,7 @@ export default function Todo(props: any) {
               value={todo.description}
               onChange={handleEdit}
               onBlur={updateTodoField}
-              className='text-sm outline-none py-1 bg-slate-100 focus:outline-slate-300 focus:rounded-lg focus:outline'
+              className='py-1 text-sm outline-none bg-slate-100 focus:outline-slate-300 focus:rounded-lg focus:outline'
             />
             :
             <p
